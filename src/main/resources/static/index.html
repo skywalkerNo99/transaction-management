@@ -73,7 +73,6 @@
                         <th>Amount</th>
                         <th>Currency</th>
                         <th>Type</th>
-                        <th>Status</th>
                         <th>Time</th>
                         <th>Actions</th>
                     </tr>
@@ -204,7 +203,6 @@
                 amount: transaction.amount,
                 currency: transaction.currency,
                 type: transaction.type,
-                status: transaction.status,
                 timestamp: transaction.timestamp
             };
             
@@ -227,7 +225,6 @@
                 <td>${escapeHtml(simplifiedTransaction.amount)}</td>
                 <td>${escapeHtml(simplifiedTransaction.currency)}</td>
                 <td>${escapeHtml(simplifiedTransaction.type)}</td>
-                <td>${escapeHtml(simplifiedTransaction.status)}</td>
                 <td>${formatTimestamp(simplifiedTransaction.timestamp)}</td>
                 <td class="action-buttons">
                     <button class="btn btn-sm btn-primary me-1" onclick="showEditModal('${escapeHtml(simplifiedTransaction.id)}', '${escapedTransaction}')">Edit</button>
