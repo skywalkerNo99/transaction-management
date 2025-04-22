@@ -3,6 +3,8 @@ package com.hsbc.transaction.service;
 import com.hsbc.transaction.exception.DuplicateTransactionException;
 import com.hsbc.transaction.exception.TransactionNotFoundException;
 import com.hsbc.transaction.model.Transaction;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 /**
@@ -31,11 +33,10 @@ public interface TransactionService {
     /**
      * Retrieves all transactions with pagination support.
      * 
-     * @param page The page number
-     * @param size The number of transactions per page
-     * @return List of transactions
+     * @param pageable pagination information
+     * @return Page of transactions
      */
-    List<Transaction> getAllTransactions(int page, int size);
+    Page<Transaction> getAllTransactions(Pageable pageable);
 
     /**
      * Updates an existing transaction.

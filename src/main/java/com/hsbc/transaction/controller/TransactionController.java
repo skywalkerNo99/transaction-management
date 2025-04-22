@@ -5,9 +5,13 @@ import com.hsbc.transaction.exception.TransactionNotFoundException;
 import com.hsbc.transaction.model.Transaction;
 import com.hsbc.transaction.service.TransactionService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Max;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -57,24 +61,26 @@ public class TransactionController {
      * @throws TransactionNotFoundException if transaction is not found
      */
     @GetMapping("/{id}")
-    public ResponseEntity<TransactionDTO> getTransaction(@PathVariable String id) {
+    public ResponseEntity<TransactionDTO> getTransaction(@PathVariable @Digits(integer = 19, fraction = 0, message = "id should be a valid number") String id) {
         Transaction transaction = transactionService.getTransaction(Long.parseLong(id));
         return ResponseEntity.ok(TransactionDTO.fromEntity(transaction));
     }
 
     /**
      * Retrieves all transactions with pagination support.
-     * 
-     * @param page Page number (0-based)
-     * @param size Number of items per page
+     *
+     * @param page the page number to retrieve (0-indexed)
+     * @param size the number of transactions per page
      * @return ResponseEntity containing the page of transactions
      */
     @GetMapping
-    public ResponseEntity<List<TransactionDTO>> getAllTransactions(
-            @RequestParam(defaultValue = "0") @Range(min = 0, max = 1024, message = "Page must be between 0 and 1024")  int page,
-            @RequestParam(defaultValue = "10") @Range(min = 1, max = 1024, message = "Size must be between 1 and 1024") int size) {
-        List<Transaction> transactions = transactionService.getAllTransactions(page, size);
-        return ResponseEntity.ok(transactions.stream().map(TransactionDTO::fromEntity).toList());
+    public ResponseEntity<Page<TransactionDTO>> getAllTransactions(
+            @RequestParam(defaultValue = "0") @Range(min = 0, message = "Page must be greater than or equal to 0") int page,
+            @RequestParam(defaultValue = "10") @Range(min = 1, max = 100, message = "Size must be between 1 and 100") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Transaction> transactions = transactionService.getAllTransactions(pageable);
+        Page<TransactionDTO> dtoPage = transactions.map(TransactionDTO::fromEntity);
+        return ResponseEntity.ok(dtoPage);
     }
 
     /**
@@ -104,7 +110,7 @@ public class TransactionController {
      * @throws TransactionNotFoundException if transaction is not found
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTransaction(@PathVariable String id) {
+    public ResponseEntity<Void> deleteTransaction(@PathVariable @Digits(integer = 19, fraction = 0, message = "id should be a valid number") String id) {
         transactionService.deleteTransaction(Long.parseLong(id));
         return ResponseEntity.noContent().build();
     }

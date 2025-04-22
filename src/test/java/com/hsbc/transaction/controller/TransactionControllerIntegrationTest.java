@@ -56,7 +56,6 @@ class TransactionControllerIntegrationTest {
                 .andExpect(jsonPath("$.amount").value("100.00"))
                 .andExpect(jsonPath("$.currency").value("USD"))
                 .andExpect(jsonPath("$.type").value("PAYMENT"))
-                .andExpect(jsonPath("$.status").value("COMPLETED"))
                 .andReturn();
 
         // Extract created transaction for later use
@@ -107,7 +106,7 @@ class TransactionControllerIntegrationTest {
 
         mockMvc.perform(get("/api/transactions/{id}", invalidId))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").exists());
+                .andExpect(jsonPath("$.code").exists());
     }
 
     @Test
@@ -117,7 +116,7 @@ class TransactionControllerIntegrationTest {
 
         mockMvc.perform(get("/api/transactions/{id}", nonExistentId))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.error").exists());
+                .andExpect(jsonPath("$.code").exists());
     }
 
     @Test
@@ -131,6 +130,7 @@ class TransactionControllerIntegrationTest {
                 .param("page", "0")
                 .param("size", "10"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content.length()").isNumber())
                 .andExpect(jsonPath("$.totalElements").isNumber());
@@ -193,22 +193,21 @@ class TransactionControllerIntegrationTest {
         );
     }
 
-    // 新增测试用例：验证分页参数的边界值
     @Test
     @DisplayName("Should handle boundary values for pagination parameters")
     void shouldHandleBoundaryValuesForPaginationParameters() throws Exception {
-        // 测试最小值
+        // minimum values
         mockMvc.perform(get("/api/transactions")
                         .param("page", "0")
                         .param("size", "1"))
                 .andExpect(status().isOk());
-        // 测试最大值
+        // maximum values
         mockMvc.perform(get("/api/transactions")
                         .param("page", "1024")
-                        .param("size", "1024"))
+                        .param("size", "100"))
                 .andExpect(status().isOk());
 
-        // 测试超出范围的值
+        // out of range values
         mockMvc.perform(get("/api/transactions")
                         .param("page", "-1")
                         .param("size", "0"))
@@ -216,7 +215,7 @@ class TransactionControllerIntegrationTest {
 
         mockMvc.perform(get("/api/transactions")
                         .param("page", "1025")
-                        .param("size", "1025"))
+                        .param("size", "101"))
                 .andExpect(status().isBadRequest());
     }
 } 

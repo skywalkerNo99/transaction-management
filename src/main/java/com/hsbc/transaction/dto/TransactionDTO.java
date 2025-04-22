@@ -42,6 +42,8 @@ public class TransactionDTO {
     @NotBlank(message = "Type is required")
     private String type;
 
+    private String timestamp;
+
     public static TransactionDTO fromEntity(Transaction transaction) {
         return TransactionDTO.builder()
                 .id(transaction.getId() != null ? transaction.getId().toString() : null)
@@ -49,6 +51,7 @@ public class TransactionDTO {
                 .amount(transaction.getMoney().getAmount().toString())
                 .currency(transaction.getMoney().getCurrency().toString())
                 .type(transaction.getType().getDisplayName())
+                .timestamp(transaction.getTimestamp().toString())
                 .build();
     }
 
@@ -57,6 +60,7 @@ public class TransactionDTO {
                 .description(this.description)
                 .money(Money.of(new BigDecimal(this.amount), Currency.getInstance(this.currency)))
                 .type(TransactionType.byValue(this.getType()))
+                .timestamp(LocalDateTime.now())
                 .build();
         if (this.id != null && !this.id.isEmpty()) {
             transaction.setId(Long.parseLong(this.id));

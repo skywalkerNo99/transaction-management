@@ -74,6 +74,7 @@
                         <th>Currency</th>
                         <th>Type</th>
                         <th>Status</th>
+                        <th>Time</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -227,6 +228,7 @@
                 <td>${escapeHtml(simplifiedTransaction.currency)}</td>
                 <td>${escapeHtml(simplifiedTransaction.type)}</td>
                 <td>${escapeHtml(simplifiedTransaction.status)}</td>
+                <td>${formatTimestamp(simplifiedTransaction.timestamp)}</td>
                 <td class="action-buttons">
                     <button class="btn btn-sm btn-primary me-1" onclick="showEditModal('${escapeHtml(simplifiedTransaction.id)}', '${escapedTransaction}')">Edit</button>
                     <button class="btn btn-sm btn-danger" onclick="deleteTransaction(this.closest('tr').getAttribute('data-transaction-id'))">Delete</button>
@@ -409,6 +411,18 @@
                 errorMessage.textContent = error.message || 'Error creating transaction. Please try again.';
             }
         });
+
+        // Format timestamp to local date and time
+        function formatTimestamp(timestamp) {
+            if (!timestamp) return '';
+            try {
+                const date = new Date(timestamp);
+                return date.toLocaleString();
+            } catch (e) {
+                console.error('Error formatting timestamp:', e);
+                return timestamp;
+            }
+        }
 
         // Initial load
         loadTransactions();

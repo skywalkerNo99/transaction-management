@@ -3,6 +3,9 @@ package com.hsbc.transaction.repository;
 import com.hsbc.transaction.config.IdGeneratorConfig;
 import com.hsbc.transaction.model.Transaction;
 import com.hsbc.transaction.util.SnowflakeIdGenerator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -52,22 +55,22 @@ public class TransactionRepository {
     }
 
     /**
-     * Returns all transactions with pagination.
+     * Returns all transactions with pagination support.
      *
-     * @param page the page number
-     * @param size the page size
-     * @return a list of transactions
+     * @param pageable the pagination information
+     * @return a Page of transactions
      */
-    public List<Transaction> findAll(int page, int size) {
+    public Page<Transaction> findAll(Pageable pageable) {
         List<Transaction> allTransactions = new ArrayList<>(transactions.values());
-        int start = page * size;
-        int end = Math.min(start + size, allTransactions.size());
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), allTransactions.size());
         
         if (start >= allTransactions.size()) {
-            return new ArrayList<>();
+            return new PageImpl<>(new ArrayList<>(), pageable, allTransactions.size());
         }
         
-        return allTransactions.subList(start, end);
+        List<Transaction> pageContent = allTransactions.subList(start, end);
+        return new PageImpl<>(pageContent, pageable, allTransactions.size());
     }
 
     /**

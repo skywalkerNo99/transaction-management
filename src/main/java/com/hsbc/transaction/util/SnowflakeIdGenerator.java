@@ -9,8 +9,8 @@ package com.hsbc.transaction.util;
  */
 public class SnowflakeIdGenerator {
     private static final long EPOCH = 1609459200000L; // Custom epoch (2021-01-01)
-    private static final long WORKER_ID_BITS = 5L;
-    private static final long DATACENTER_ID_BITS = 5L;
+    private static final long WORKER_ID_BITS = 1L;
+    private static final long DATACENTER_ID_BITS = 1L;
     private static final long SEQUENCE_BITS = 12L;
 
     private static final long MAX_WORKER_ID = ~(-1L << WORKER_ID_BITS);

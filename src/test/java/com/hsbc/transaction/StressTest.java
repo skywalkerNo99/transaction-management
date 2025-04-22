@@ -10,6 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -73,8 +76,8 @@ class StressTest {
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get(30, TimeUnit.SECONDS);
 
         // Verify all transactions were created
-        List<Transaction> allTransactions = transactionService.getAllTransactions(0, TOTAL_TRANSACTIONS);
-        assertEquals(TOTAL_TRANSACTIONS, allTransactions.size(),
+        Page<Transaction> allTransactions = transactionService.getAllTransactions(PageRequest.of(0, TOTAL_TRANSACTIONS));
+        assertEquals(TOTAL_TRANSACTIONS, allTransactions.getTotalElements(),
                 "Expected " + TOTAL_TRANSACTIONS + " transactions to be created");
 
         executorService.shutdown();
@@ -118,7 +121,7 @@ class StressTest {
                     assertNotNull(created.getId());
 
                     // Read all with pagination
-                    List<Transaction> transactions = transactionService.getAllTransactions(0, 10);
+                    Page<Transaction> transactions = transactionService.getAllTransactions(PageRequest.of(0, 10));
                     assertFalse(transactions.isEmpty());
                 } catch (Exception e) {
                     fail("Concurrent operation failed: " + e.getMessage());

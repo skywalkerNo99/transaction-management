@@ -7,10 +7,13 @@ import com.hsbc.transaction.exception.TransactionNotFoundException;
 import com.hsbc.transaction.enums.TransactionStatus;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -62,10 +65,13 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Cacheable(value = "allTransactions")
-    public List<Transaction> getAllTransactions(int page, int size) {
-        logger.debug("Fetching all transactions with page: {} and size: {}", page, size);
-        List<Transaction> transactions = transactionRepository.findAll(page, size);
-        logger.info("Found {} transactions", transactions.size());
+    public Page<Transaction> getAllTransactions(Pageable pageable) {
+        logger.debug("Fetching all transactions with pageable: {}", pageable);
+        Page<Transaction> transactions = transactionRepository.findAll(pageable);
+        logger.info("Found {} transactions in page {} of size {}", 
+            transactions.getNumberOfElements(), 
+            pageable.getPageNumber(), 
+            pageable.getPageSize());
         return transactions;
     }
 
@@ -92,6 +98,7 @@ public class TransactionServiceImpl implements TransactionService {
         existingTransaction.setType(transactionRequest.getType());
         // Set status to completed
         existingTransaction.setStatus(TransactionStatus.COMPLETED);
+        existingTransaction.setTimestamp(LocalDateTime.now());
         
         // Save and return
         Transaction updatedTransaction = transactionRepository.save(existingTransaction);

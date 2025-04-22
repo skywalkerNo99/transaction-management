@@ -11,10 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Currency;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -149,17 +153,21 @@ class TransactionServiceImplTest {
                 .money(Money.of(new BigDecimal("200.00"), USD))
                 .build();
 
-        when(transactionRepository.findAll(0, 10)).thenReturn(Arrays.asList(t1, t2));
+        Page<Transaction> page = mock(Page.class);
+        when(page.getTotalElements()).thenReturn(2L);
+        when(page.getContent()).thenReturn(Arrays.asList(t1, t2));
+
+        when(transactionRepository.findAll(PageRequest.of(0, 10))).thenReturn(page);
 
         // Act
-        var result = transactionService.getAllTransactions(0, 10);
+        var result = transactionService.getAllTransactions(PageRequest.of(0, 10));
 
         // Assert
         assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals("Transaction 1", result.get(0).getDescription());
-        assertEquals("Transaction 2", result.get(1).getDescription());
-        verify(transactionRepository).findAll(0, 10);
+        assertEquals(2, result.getTotalElements());
+        assertEquals("Transaction 1", result.getContent().get(0).getDescription());
+        assertEquals("Transaction 2", result.getContent().get(1).getDescription());
+        verify(transactionRepository).findAll(PageRequest.of(0, 10));
     }
 
     @Test
