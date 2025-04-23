@@ -63,7 +63,7 @@ A robust transaction management system built with Spring Boot and modern web tec
 ## Getting Started
 
 ### Prerequisites
-- Java Development Kit (JDK) 17 or later
+- Java Development Kit (JDK) 21 or later
 - Maven 3.6 or later
 - Docker 20.10.x or later (for containerized deployment)
 - Docker Compose v2.x or later (for containerized deployment)
@@ -195,13 +195,14 @@ services:
   - Request body example:
     ```json
     {
-      "id": "123",  // Optional
+      "id": "123",
       "description": "Payment for services",
       "amount": "100.00",
       "currency": "USD",
       "type": "PAYMENT"
     }
     ```
+    The field "id" is optional.
 
 - **Get Transaction**
   - GET `/api/transactions/{id}`
@@ -230,10 +231,11 @@ services:
   "amount": "string",
   "currency": "string",
   "type": "string",
-  "status": "string",  // Default: COMPLETED
+  "status": "string", 
   "timestamp": "string"
 }
 ```
+The field "status" is set to "COMPLETED" by default.
 
 ### Supported Transaction Types
 - PAYMENT
