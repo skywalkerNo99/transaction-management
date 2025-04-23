@@ -78,12 +78,12 @@ A robust transaction management system built with Spring Boot and modern web tec
 
 2. Build the project:
    ```bash
-   ./mvnw clean install
+   mvn clean install
    ```
 
 3. Run the application:
    ```bash
-   ./mvnw spring-boot:run
+   mvn spring-boot:run
    ```
 
 4. Access the application:
@@ -255,7 +255,7 @@ The system provides detailed error messages for various scenarios:
 
 Run the tests using:
 ```bash
-./mvnw test
+mvn test
 ```
 
 The project includes:
