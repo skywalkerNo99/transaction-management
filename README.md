@@ -261,8 +261,7 @@ mvn test
 The project includes:
 - Unit tests
 - Integration tests
-- Controller tests
-- Service layer tests
+- Stress tests
 
 ## Security Considerations
 
