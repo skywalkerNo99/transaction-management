@@ -103,26 +103,6 @@ class TransactionDTOValidationTest {
     }
 
     @Test
-    @DisplayName("Should fail validation when type is invalid")
-    void validate_InvalidType() {
-        // Arrange
-        TransactionDTO dto = TransactionDTO.builder()
-                .id("1")
-                .description("Valid description")
-                .amount("100.00")
-                .currency("USD")
-                .type("INVALID_TYPE")
-                .build();
-
-        // Act
-        Set<ConstraintViolation<TransactionDTO>> violations = validator.validate(dto);
-
-        // Assert
-        assertFalse(violations.isEmpty(), "Validation errors should occur for invalid type");
-        assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("Invalid transaction type")));
-    }
-
-    @Test
     @DisplayName("Should fail validation when description exceeds maximum length")
     void validate_DescriptionExceedsMaxLength() {
         // Arrange

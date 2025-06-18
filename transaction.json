@@ -1,0 +1,11 @@
+{
+	"description":"pppp",
+	"id":2299539073134592,
+	"money":{
+		"amount":999.00,
+		"currency":"USD"
+	},
+	"status":"COMPLETED",
+	"timestamp":"2025-06-13 10:52:06.630400",
+	"type":"PAYMENT"
+}

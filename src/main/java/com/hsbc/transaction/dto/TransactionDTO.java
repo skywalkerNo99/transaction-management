@@ -21,25 +21,14 @@ import java.util.Currency;
 @AllArgsConstructor
 @Builder
 public class TransactionDTO {
-    @Length(min = 1, max = 32, message = "id length must be between 0 and 32")
     private String id;
     
-    @NotBlank(message = "Description is required")
-    @Length(max = 1024, message = "description length must be between 0 and 1024")
     private String description;
     
-    @NotBlank(message = "Amount is required")
-    @DecimalMin(value = "0.01", inclusive = true, message = "Amount must be greater than 0")
-    @DecimalMax(value = "1000000", inclusive = false, message = "Amount must be less than 1000000")
-    @Digits(integer = 7, fraction = 2, message = "Amount must be a valid decimal number with up to 7 digits and 2 decimal")
     private String amount;
     
-    @NotNull(message = "Currency is required")
-    @Length(min = 1, max = 32, message = "currency length must be between 1 and 32")
     private String currency;
 
-    @ValidTransactionType
-    @NotBlank(message = "Type is required")
     private String type;
 
     private String timestamp;

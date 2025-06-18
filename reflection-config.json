@@ -1,0 +1,46 @@
+[
+  {
+    "name": "com.alibaba.fastjson2.JSONObject",
+    "allDeclaredFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "com.hsbc.transaction.model.Transaction",
+    "allDeclaredFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "com.hsbc.transaction.model.Money",
+    "allDeclaredFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "com.hsbc.transaction.enums.TransactionStatus",
+    "allDeclaredFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "com.hsbc.transaction.enums.TransactionType",
+    "allDeclaredFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "java.math.BigDecimal",
+    "allDeclaredFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "java.util.Currency",
+    "allDeclaredFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  }
+] 

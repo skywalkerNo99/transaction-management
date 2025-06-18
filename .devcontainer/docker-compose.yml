@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: springboot-test
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspace:cached
+      - ~/.m2:/root/.m2:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: sleep infinity
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    ports:
+      - "8080:8080"
+    networks:
+      - transaction-network
+    privileged: true
+    deploy:
+      resources:
+        limits:
+          memory: 16G
+        reservations:
+          memory: 8G
+
+  # 如果需要数据库，可以取消下面的注释
+  # db:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     POSTGRES_DB: transaction_db
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   networks:
+  #     - transaction-network
+
+networks:
+  transaction-network:
+    driver: bridge
+
+# volumes:
+#   postgres-data: 

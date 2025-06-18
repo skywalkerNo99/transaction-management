@@ -1,6 +1,7 @@
 package com.hsbc.transaction.model;
 
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -10,12 +11,13 @@ import java.util.Objects;
 /**
  * Money value object representing an amount in a specific currency.
  */
-@Getter
+@Data
+@NoArgsConstructor
 public class Money {
-    private final BigDecimal amount;
-    private final Currency currency;
+    private BigDecimal amount;
+    private Currency currency;
 
-    private Money(BigDecimal amount, Currency currency) {
+    public Money(BigDecimal amount, Currency currency) {
         this.amount = amount.setScale(2, RoundingMode.HALF_UP);
         this.currency = currency;
     }
